@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NuCheck — 분석 결과</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="app-page">
+  <nav class="app-nav">
+    <a class="logo" href="01-hero.html">NuCheck</a>
+    <div class="step-track">
+      <div class="step-track__item step-track__item--done">
+        <span class="step-track__circle">✓</span>
+        <span class="step-track__label">현재 제품 등록</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item step-track__item--done">
+        <span class="step-track__circle">✓</span>
+        <span class="step-track__label">새 제품 등록</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item step-track__item--active">
+        <span class="step-track__circle">3</span>
+        <span class="step-track__label">AI 분석</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item">
+        <span class="step-track__circle">4</span>
+        <span class="step-track__label">결과 확인</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="app-main app-main--narrow">
+    <div class="result-layout">
+      <aside class="result-product-card">
+        <div class="result-product-card__thumb"><img src="assets/bottle-black.svg" alt="AAC collagen" /></div>
+        <h2 class="result-product-card__name">AAC collagen</h2>
+        <p class="result-product-card__tag">피부 건강 / 콜라겐</p>
+        <div class="result-product-card__divider">
+          <p class="result-product-card__label">주요 성분</p>
+          <p class="result-product-card__ingredients">
+            마그네슘 400mg<br />
+            비타민 C 6 1.5mg<br />
+            아연 8.5mg
+          </p>
+        </div>
+      </aside>
+
+      <div class="result-content">
+        <h1 class="verdict-title">구매 보류를 권장합니다</h1>
+        <p class="verdict-desc">현재 복용 중인 제품과 성분, 기능 중복이 확인되었습니다.</p>
+
+        <div class="verdict-box">
+          <div class="verdict-row">
+            <span class="verdict-row__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><line x1="6" y1="18" x2="18" y2="6" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <div>
+              <p class="verdict-row__label">성분 중복</p>
+              <p class="verdict-row__value">비타민 C</p>
+              <p class="verdict-row__note">현재 복용 중인 제품과 중복됩니다.</p>
+            </div>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-row__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.6-3 7.7-7 9-4-1.3-7-4.4-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <p class="verdict-row__label">기능 중복</p>
+              <p class="verdict-row__value">피부 건강</p>
+              <p class="verdict-row__note">현재 복용 중인 제품으로도 유사한 기능을 충족합니다.</p>
+            </div>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-row__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4l9 16H3L12 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="12" y1="10" x2="12" y2="14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17" r="0.9" fill="currentColor"/></svg>
+            </span>
+            <div>
+              <p class="verdict-row__label">주의 조합</p>
+              <p class="verdict-row__value">해당 사항 없음</p>
+              <p class="verdict-row__note">주의가 필요한 조합은 확인되지 않습니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <p class="summary-box__title">AI Summary</p>
+          <p class="summary-box__text">현재 보유 중인 제품만으로 유사한 기능을 충분히 충족하고 있어 추가 구매의 필요성이 낮습니다.</p>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>현재 복용 제품</th>
+              <th>새 제품 (AAC Coolangen)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>주요 성분</td>
+              <td>비타민 C, 오메가3, 마그네슘, 아연</td>
+              <td>콜라겐, 비타민 C, 히알루론산</td>
+            </tr>
+            <tr>
+              <td>1일 섭취량</td>
+              <td>비타민 C 100mg, 아연 9g</td>
+              <td>콜라겐, 비타민 C, 히알루론산</td>
+            </tr>
+            <tr>
+              <td>기능성</td>
+              <td>면역, 뼈 건강, 에너지 대사</td>
+              <td>피부 건강, 면역 유지</td>
+            </tr>
+            <tr>
+              <td>중복 성분</td>
+              <td class="highlight">비타민 C</td>
+              <td class="highlight">비타민 C</td>
+            </tr>
+            <tr>
+              <td>신규 성분</td>
+              <td class="muted">—</td>
+              <td>콜라겐, 히알루론산</td>
+            </tr>
+            <tr>
+              <td>주의 조합</td>
+              <td class="muted">—</td>
+              <td class="muted">—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Medical & Professional Disclaimer Notice -->
+        <div class="medical-disclaimer-box" style="margin-top: 24px; padding: 16px 20px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: var(--radius-m); display: flex; align-items: flex-start; gap: 12px;">
+          <span style="font-size: 18px; line-height: 1;">💡</span>
+          <div style="font-size: 13px; color: #8c6b00; line-height: 1.6;">
+            <strong style="font-weight: 700; display: block; margin-bottom: 2px; color: #614700;">의료 / 전문가 상담 안내</strong>
+            본 AI 분석 결과는 성분 및 함량 비교 참고용 자료이며, 의사의 진단이나 약사의 처방을 대신할 수 없습니다. 
+            개인의 건강 상태, 기저 질환, 복용 약물에 따른 정확한 복용 지도 등 자세한 사항은 <strong>반드시 의사 또는 약사 등 전문 의료진과의 상담</strong>을 거치시기 바랍니다.
+          </div>
+        </div>
+
+        <div class="app-footer-actions app-footer-actions--split">
+          <a class="btn btn--outline" href="08-step2-selected.html">이전 단계</a>
+          <a class="btn btn--dark" href="11-result-save.html">다음 단계</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/products-data.js"></script>
+<script src="js/product-toggle.js"></script>
+<script src="js/ai-analysis.js"></script>
+</body>
+</html>
