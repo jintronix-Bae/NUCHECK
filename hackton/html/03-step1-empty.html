@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NuCheck — 현재 제품 등록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="app-page">
+  <nav class="app-nav">
+    <a class="logo" href="01-hero.html">NuCheck</a>
+    <div class="step-track">
+      <div class="step-track__item step-track__item--active">
+        <span class="step-track__circle">1</span>
+        <span class="step-track__label">현재 제품 등록</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item">
+        <span class="step-track__circle">2</span>
+        <span class="step-track__label">새 제품 등록</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item">
+        <span class="step-track__circle">3</span>
+        <span class="step-track__label">AI 분석</span>
+      </div>
+      <span class="step-track__line"></span>
+      <div class="step-track__item">
+        <span class="step-track__circle">4</span>
+        <span class="step-track__label">결과 확인</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="app-main app-main--narrow">
+    <h1 class="page-title">현재 복용 중인 제품을 등록해주세요.</h1>
+    <p class="page-desc">AI가 성분과 함량을 기반으로 분석하기 위해 복용 중인 모든 약과 영양제를 등록해주세요.</p>
+
+    <form class="search-bar" onsubmit="location.href='04-step1-search.html'; return false;">
+      <input type="text" placeholder="제품명 또는 성분명을 검색하세요." />
+      <span class="search-bar__icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+    </form>
+
+    <p class="section-label">등록 제품 (0)</p>
+
+    <div class="app-footer-actions app-footer-actions--split">
+      <a class="btn btn--outline" href="02-how-it-works.html">이전 단계</a>
+      <a class="btn btn--dark" href="04-step1-search.html">다음 단계</a>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
