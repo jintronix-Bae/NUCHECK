@@ -1,0 +1,130 @@
+name: Build and Deploy to Gabia Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/nucheck-app:latest
+
+      - name: Deploy to Gabia Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            # 프로젝트 디렉토리 생성
+            mkdir -p ~/nucheck
+            cd ~/nucheck
+
+            # .env 파일 생성
+            cat > .env << 'ENVEOF'
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            MYSQL_USER=${{ secrets.MYSQL_USER }}
+            MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            SPRING_JPA_HIBERNATE_DDL_AUTO=update
+            ENVEOF
+
+            # docker-compose.yml 생성
+            cat > docker-compose.yml << 'COMPOSEEOF'
+            services:
+              mysql:
+                image: mysql:8.4
+                container_name: nucheck-mysql
+                restart: unless-stopped
+                environment:
+                  MYSQL_DATABASE: ${MYSQL_DATABASE}
+                  MYSQL_USER: ${MYSQL_USER}
+                  MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+                  MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+                ports:
+                  - "3307:3306"
+                volumes:
+                  - mysql-data:/var/lib/mysql
+                healthcheck:
+                  test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+                  interval: 10s
+                  timeout: 5s
+                  retries: 10
+                  start_period: 30s
+
+              app:
+                image: DOCKERHUB_USERNAME_PLACEHOLDER/nucheck-app:latest
+                container_name: nucheck-app
+                restart: unless-stopped
+                ports:
+                  - "8080:8080"
+                environment:
+                  OPENAI_API_KEY: ${OPENAI_API_KEY}
+                  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=utf8
+                  SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+                  SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+                  SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+                depends_on:
+                  mysql:
+                    condition: service_healthy
+
+            volumes:
+              mysql-data:
+            COMPOSEEOF
+
+            # Docker Hub 유저네임 치환
+            sed -i "s|DOCKERHUB_USERNAME_PLACEHOLDER|${{ secrets.DOCKERHUB_USERNAME }}|g" docker-compose.yml
+
+            # 최신 이미지 pull 후 재시작
+            docker compose pull
+            docker compose up -d
+
+            # Nginx + SSL 설정 (최초 1회만 실행, 이미 있으면 스킵)
+            if ! command -v nginx &> /dev/null; then
+              sudo apt update
+              sudo apt install -y nginx certbot python3-certbot-nginx
+            fi
+
+            # Nginx 설정 파일 생성
+            if [ ! -f /etc/nginx/sites-available/nucheck ]; then
+              sudo tee /etc/nginx/sites-available/nucheck > /dev/null << 'NGINXEOF'
+            server {
+                listen 80;
+                server_name nucheck-api.duckdns.org;
+
+                location / {
+                    proxy_pass http://localhost:8080;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                }
+            }
+            NGINXEOF
+
+              sudo ln -sf /etc/nginx/sites-available/nucheck /etc/nginx/sites-enabled/
+              sudo rm -f /etc/nginx/sites-enabled/default
+              sudo nginx -t && sudo systemctl reload nginx
+
+              # SSL 인증서 발급 (자동 동의)
+              sudo certbot --nginx -d nucheck-api.duckdns.org --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
+            fi
+
+            sudo systemctl reload nginx
