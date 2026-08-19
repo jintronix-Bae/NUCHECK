@@ -6,6 +6,8 @@ import nucheck.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -18,5 +20,15 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
+    // #2 사용자 아이디 찾기
+    public Optional<User> findById(String userId) {
+        return userRepository.findById(userId);
+    }
 
+    // #3 처음 보는 UUID면 사용자 생성하기
+    @Transactional
+    public User getOrCreateUser(String userId) {
+        return userRepository.findById(userId)
+                .orElseGet(() -> userRepository.save(new User(userId)));
+    }
 }
